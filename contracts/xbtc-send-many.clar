@@ -28,7 +28,7 @@
 (define-public (send-xbtc-with-memo (xsat uint) (to principal) (memo (buff 34)))
 	(contract-call?
 		'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin
-		transfer xbtc tx-sender to memo))
+		transfer xsat tx-sender to (some memo)))
 
 (define-private (send-xbtc (recipient {to: principal, xbtc: uint, memo: (buff
 34), swap-to-ustx: bool, min-dy: (optional uint)}))
@@ -51,7 +51,7 @@
 ;; send xbtc to many recipients 
 ;; depending on their preference xbtc is swapped to stx via alex swap
 (define-public (send-many (recipients (list 200 {to: principal, xbtc: uint,
-memo: (buff 34), swap-to-ustx: bool})))
+memo: (buff 34), swap-to-ustx: bool, min-dy: (optional uint)})))
 	(fold check-err
 		(map send-xbtc recipients)
 		(ok true)))
