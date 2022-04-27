@@ -30,16 +30,16 @@
 		'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin
 		transfer xsat tx-sender to (some memo)))
 
-(define-private (send-xbtc (recipient {to: principal, xbtc: uint, memo: (buff
+(define-private (send-xbtc (recipient {to: principal, xbtc-in-sats: uint, memo: (buff
 34), swap-to-ustx: bool, min-dy: (optional uint)}))
 	(if (get swap-to-ustx recipient)
 		(swap-xbtc-send-stx-with-memo
-			(get xbtc recipient)
+			(get xbtc-in-sats recipient)
 			(get to recipient)
 			(get memo recipient)
 			(get min-dy recipient))
 		(send-xbtc-with-memo
-			(get xbtc recipient)
+			(get xbtc-in-sats recipient)
 			(get to recipient)
 			(get memo recipient))))
 
@@ -50,7 +50,7 @@
         
 ;; send xbtc to many recipients 
 ;; depending on their preference xbtc is swapped to stx via alex swap
-(define-public (send-many (recipients (list 200 {to: principal, xbtc: uint,
+(define-public (send-many (recipients (list 200 {to: principal, xbtc-in-sats: uint,
 memo: (buff 34), swap-to-ustx: bool, min-dy: (optional uint)})))
 	(fold check-err
 		(map send-xbtc recipients)
